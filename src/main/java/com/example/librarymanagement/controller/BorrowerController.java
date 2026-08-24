@@ -24,8 +24,8 @@ public class BorrowerController {
     }
 
     @PostMapping
-    public ResponseEntity<Borrower> addBorrower(@Valid @RequestBody BorrowerRequestDto borrowerDto) {
-        Borrower savedBorrower = borrowerService.addBorrower(borrowerDto);
+    public ResponseEntity<Borrower> addBorrower(@Valid @RequestBody BorrowerRequestDto requestDto) {
+        Borrower savedBorrower = borrowerService.addBorrower(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedBorrower);
     }
 }
