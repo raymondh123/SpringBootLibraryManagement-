@@ -5,12 +5,15 @@ import com.example.librarymanagement.model.BorrowingTransaction;
 import com.example.librarymanagement.repository.BookRepository;
 import com.example.librarymanagement.repository.BorrowerRepository;
 import com.example.librarymanagement.repository.BorrowingTransactionRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class TransactionService {
+    @Value("${library.max.borrow-limit:5}")
+    private int maxBorrowLimit;
 
     private final BorrowingTransactionRepository transactionRepository;
     private final BookRepository bookRepository;
@@ -29,6 +32,10 @@ public class TransactionService {
         }
         Borrower borrower = borrowerRepository.findById(borrowerId)
                 .orElseThrow(() -> new RuntimeException("Borrower not found"));
+        long activeCount= transactionRepository.countByBorrowerIdAndReturnDateIsNull(borrowerId);
+        if (activeCount >= maxBorrowLimit){
+            throw new RuntimeException("Borrower has reached the maximum borrowing limit of" + maxBorrowLimit);
+        }
         book.setAvailable(false);
         bookRepository.save(book);
 

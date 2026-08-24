@@ -5,5 +5,6 @@ import java.util.List;
 
 public interface BorrowingTransactionRepository extends JpaRepository<BorrowingTransaction, Long> {
     List<BorrowingTransaction> findByBorrowerId(Long borrowerId);
+    long countByBorrowerIdAndReturnDateIsNull(Long borrowerId);
 }
 
