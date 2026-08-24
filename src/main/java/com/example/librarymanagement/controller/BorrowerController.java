@@ -1,11 +1,12 @@
 package  com.example.librarymanagement.controller;
 
 import com.example.librarymanagement.model.Borrower;
-import com.example.librarymanagement.service.BookService;
+import com.example.librarymanagement.dto.BorrowerRequestDto;
 import com.example.librarymanagement.service.BorrowerService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 import java.util.List;
 
 @RestController
@@ -23,8 +24,8 @@ public class BorrowerController {
     }
 
     @PostMapping
-    public ResponseEntity<Borrower> addBorrower(@Valid @RequestBody Borrower borrower) {
-        Borrower savedBorrower = borrowerService.addBorrower(borrower);
-        return ResponseEntity.ok(savedBorrower);
+    public ResponseEntity<Borrower> addBorrower(@Valid @RequestBody BorrowerRequestDto borrowerDto) {
+        Borrower savedBorrower = borrowerService.addBorrower(borrowerDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedBorrower);
     }
 }
