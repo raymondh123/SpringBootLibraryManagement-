@@ -8,10 +8,10 @@ public class BookRequestDto {
     @NotBlank(message = "Title is mandatory")
     private String title;
 
-    @NotBlank(message = "ISBN is mandatory")
+    @NotBlank(message = "ISBN is mandatory and cannot be null")
     private String isbn;
 
-    @NotNull(message = "Category is mandatory")
+    @NotNull(message = "Category must be a valid enum value")
     private BookCategory category;
     @NotNull(message = "Author ID id mandatory")
     private Long authorId;

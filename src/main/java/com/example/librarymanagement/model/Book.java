@@ -13,7 +13,7 @@ public class Book {
     private String title;
 
     @NotBlank(message = "ISBN is mandatory")
-    @Column(unique = true)
+    @Column(unique = true,nullable = false)
     private String isbn;
 
     @NotNull(message = "Category is mandatory")

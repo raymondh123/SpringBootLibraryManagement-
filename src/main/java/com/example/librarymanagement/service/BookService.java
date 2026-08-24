@@ -12,16 +12,23 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
+    private final OpenLibraryService openLibraryService;
 
-    public BookService(BookRepository bookRepository, AuthorRepository authorRepository) {
+    public BookService(BookRepository bookRepository, AuthorRepository authorRepository, OpenLibraryService openLibraryService) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
+        this.openLibraryService = openLibraryService;
     }
     public List<Book> getAllBooks() {return bookRepository.findAll();}
 
     public Book addBook(BookRequestDto dto){
-        Author author = authorRepository.findById(dto.getAuthorId())
-                .orElseThrow(() -> new RuntimeException("Author Not Found"));
+        String fetchedAuthorName = openLibraryService.getAuthorNameByIsbn(dto.getIsbn());
+        Author author = authorRepository.findByName(fetchedAuthorName)
+                .orElseGet(() -> {
+                    Author newAuthor = new Author();
+                    newAuthor.setName(fetchedAuthorName);
+                    return authorRepository.save(newAuthor);
+                });
         Book book = new Book();
         book.setTitle(dto.getTitle());
         book.setIsbn(dto.getIsbn());
