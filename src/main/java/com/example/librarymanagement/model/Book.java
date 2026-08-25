@@ -13,11 +13,7 @@ public class Book {
     private String title;
 
     @NotBlank(message = "ISBN is mandatory")
-<<<<<<< HEAD
     @Column(unique = true,nullable = false)
-=======
-    @Column(unique = true)
->>>>>>> 608869bda7becb0e3512de53f11d4e0940828524
     private String isbn;
 
     @NotNull(message = "Category is mandatory")

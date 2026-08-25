@@ -12,24 +12,18 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
-<<<<<<< HEAD
+
     private final OpenLibraryService openLibraryService;
 
     public BookService(BookRepository bookRepository, AuthorRepository authorRepository, OpenLibraryService openLibraryService) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.openLibraryService = openLibraryService;
-=======
 
-    public BookService(BookRepository bookRepository, AuthorRepository authorRepository) {
-        this.bookRepository = bookRepository;
-        this.authorRepository = authorRepository;
->>>>>>> 608869bda7becb0e3512de53f11d4e0940828524
     }
     public List<Book> getAllBooks() {return bookRepository.findAll();}
 
     public Book addBook(BookRequestDto dto){
-<<<<<<< HEAD
         String fetchedAuthorName = openLibraryService.getAuthorNameByIsbn(dto.getIsbn());
         Author author = authorRepository.findByName(fetchedAuthorName)
                 .orElseGet(() -> {
@@ -37,10 +31,7 @@ public class BookService {
                     newAuthor.setName(fetchedAuthorName);
                     return authorRepository.save(newAuthor);
                 });
-=======
-        Author author = authorRepository.findById(dto.getAuthorId())
-                .orElseThrow(() -> new RuntimeException("Author Not Found"));
->>>>>>> 608869bda7becb0e3512de53f11d4e0940828524
+
         Book book = new Book();
         book.setTitle(dto.getTitle());
         book.setIsbn(dto.getIsbn());

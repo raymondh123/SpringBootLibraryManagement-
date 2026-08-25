@@ -12,7 +12,7 @@ public class OpenLibraryService {
 
     public String getAuthorNameByIsbn(String isbn) {
         try {
-            String url = "https://openLibrary.org/api/books?bikeys=ISBN:" + isbn + "&format=json&jscmd=data";
+            String url = "https://openLibrary.org/api/books?bibkeys=ISBN:" + isbn + "&format=json&jscmd=data";
             OpenLibraryResponse response = restTemplate.getForObject(url, OpenLibraryResponse.class);
 
             if (response != null && response.getBooks() != null) {
