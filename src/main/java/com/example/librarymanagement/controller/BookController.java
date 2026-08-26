@@ -1,5 +1,6 @@
 package  com.example.librarymanagement.controller;
 import com.example.librarymanagement.dto.BookRequestDto;
+import com.example.librarymanagement.dto.BookResponseDto;
 import com.example.librarymanagement.model.Book;
 import com.example.librarymanagement.model.BookCategory;
 import com.example.librarymanagement.service.BookService;
@@ -17,17 +18,17 @@ public class BookController {
     }
 
     @GetMapping
-    public List<Book> getAllBooks() {
+    public List<BookResponseDto> getAllBooks() {
         return bookService.getAllBooks();
     }
 
     @PostMapping
-    public ResponseEntity<Book> addBook(@Valid @RequestBody BookRequestDto dto) {
-        Book savedBook = bookService.addBook(dto);
+    public ResponseEntity<BookResponseDto> addBook(@Valid @RequestBody BookRequestDto dto) {
+        BookResponseDto savedBook = bookService.addBook(dto);
         return ResponseEntity.ok(savedBook);
     }
     @GetMapping("/search")
-    public List<Book> searchBooks(
+    public List<BookResponseDto> searchBooks(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) BookCategory category,
             @RequestParam(required = false) String authorName) {

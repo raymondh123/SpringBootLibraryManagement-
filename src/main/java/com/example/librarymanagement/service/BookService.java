@@ -5,6 +5,8 @@ import com.example.librarymanagement.model.Book;
 import com.example.librarymanagement.model.BookCategory;
 import com.example.librarymanagement.repository.AuthorRepository;
 import com.example.librarymanagement.repository.BookRepository;
+import com.example.librarymanagement.dto.BookResponseDto;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import java.util.List;
 @Service
@@ -21,9 +23,13 @@ public class BookService {
         this.openLibraryService = openLibraryService;
 
     }
-    public List<Book> getAllBooks() {return bookRepository.findAll();}
+    public List<BookResponseDto> getAllBooks() {
+        return bookRepository.findAll().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
 
-    public Book addBook(BookRequestDto dto){
+    public BookResponseDto addBook(BookRequestDto dto){
         String fetchedAuthorName = openLibraryService.getAuthorNameByIsbn(dto.getIsbn());
         Author author = authorRepository.findByName(fetchedAuthorName)
                 .orElseGet(() -> {
@@ -39,12 +45,30 @@ public class BookService {
         book.setAuthor(author);
         book.setAvailable(true);
 
-        return bookRepository.save(book);
+        Book savedBook = bookRepository.save(book);
+        return convertToDto(savedBook);
     }
-    public List<Book> searchBooks(String title, BookCategory category,String authorName){
-        if (title != null) return bookRepository.findByTitleContainingIgnoreCase(title);
-        if (category != null) return bookRepository.findByCategory(category);
-        if (authorName != null) return bookRepository.findByAuthorNameContainingIgnoreCase(authorName);
-        return bookRepository.findAll();
+    public List<BookResponseDto> searchBooks(String title, BookCategory category,String authorName){
+        List<Book>books;
+        if (title != null){ books =  bookRepository.findByTitleContainingIgnoreCase(title);
+        } else if (category != null){
+            books = bookRepository.findByCategory(category);
+        }else if (authorName != null){
+            books = bookRepository.findByAuthorNameContainingIgnoreCase(authorName);
+        }else {
+            books = bookRepository.findAll();
+        }
+        return books.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+    private BookResponseDto convertToDto(Book book){
+        String authorName = (book.getAuthor() != null) ? book.getAuthor().getName() : "Unknown";
+        return new BookResponseDto(
+            book.getId(),
+            book.getTitle(),
+            book.getIsbn(),
+            book.getCategory(),
+            authorName,
+            book.isAvailable()
+        );
     }
 }
