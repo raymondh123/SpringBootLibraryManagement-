@@ -42,4 +42,12 @@ public class BorrowerService {
 
         return borrowerRepository.save(borrower);
     }
+    public void deleteBorrower(Long id) {
+        Borrower borrower = borrowerRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Borrower not found with id: " + id));
+
+        borrowerRepository.delete(borrower);
+    }
 }
