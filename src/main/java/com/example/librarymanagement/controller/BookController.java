@@ -38,4 +38,13 @@ public class BookController {
             @RequestParam(required = false) String authorName) {
         return bookService.searchBooks(title, category, authorName);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<BookResponseDto> updateBook(
+            @PathVariable Long id,
+            @Valid @RequestBody BookRequestDto dto) {
+
+        BookResponseDto updatedBook = bookService.updateBook(id, dto);
+
+        return ResponseEntity.ok(updatedBook);
+    }
 }

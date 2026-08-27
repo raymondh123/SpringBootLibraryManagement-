@@ -57,6 +57,20 @@ public class BookService {
         Book savedBook = bookRepository.save(book);
         return convertToDto(savedBook);
     }
+    public BookResponseDto updateBook(Long id, BookRequestDto dto) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Book not found with id: " + id));
+
+        book.setTitle(dto.getTitle());
+        book.setIsbn(dto.getIsbn());
+        book.setCategory(dto.getCategory());
+
+        Book updatedBook = bookRepository.save(book);
+
+        return convertToDto(updatedBook);
+    }
     public List<BookResponseDto> searchBooks(String title, BookCategory category,String authorName){
         List<Book>books;
         if (title != null){ books =  bookRepository.findByTitleContainingIgnoreCase(title);
