@@ -1,6 +1,7 @@
 package com.example.librarymanagement.service;
 import com.example.librarymanagement.model.Author;
 import com.example.librarymanagement.repository.AuthorRepository;
+import com.example.librarymanagement.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public class AuthorService {
         return authorRepository.findAll();
     }
     public Author getAuthorById(Long id) {
-        return authorRepository.findById(id).orElse(null);
+        return authorRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Author not found with id " + id));
     }
     public Author saveAuthor(Author author) {
         return authorRepository.save(author);

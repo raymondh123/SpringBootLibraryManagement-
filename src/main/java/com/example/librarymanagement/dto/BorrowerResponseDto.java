@@ -4,12 +4,14 @@ public class BorrowerResponseDto {
     private Long id;
     private String name;
     private String email;
+    private String phoneNumber;
 
     public BorrowerResponseDto() {}
-    public BorrowerResponseDto(Long id, String name, String email) {
+    public BorrowerResponseDto(Long id, String name, String email, String phoneNumber) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.phoneNumber = phoneNumber;
     }
     public Long getId() {
         return id;
@@ -28,5 +30,11 @@ public class BorrowerResponseDto {
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

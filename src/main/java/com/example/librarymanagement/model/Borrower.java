@@ -21,7 +21,7 @@ public class Borrower {
     private String phoneNumber;
 
     public Borrower(){}
-    public Long gerId() {return id;}
+    public Long getId() {return id;}
     public void setId(Long id) {this.id = id;}
 
     public String getName() {return name;}

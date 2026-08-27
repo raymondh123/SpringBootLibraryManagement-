@@ -3,17 +3,16 @@ package  com.example.librarymanagement.controller;
 import com.example.librarymanagement.model.Borrower;
 
 import com.example.librarymanagement.dto.BorrowerRequestDto;
-
+import com.example.librarymanagement.dto.BorrowerResponseDto;
 import com.example.librarymanagement.service.BookService;
 
 import com.example.librarymanagement.service.BorrowerService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import org.springframework.http.HttpStatus;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/borrowers")
@@ -25,14 +24,22 @@ public class BorrowerController {
     }
 
     @GetMapping
-    public List<Borrower> getAllBorrowers() {
-        return borrowerService.getAllBorrowers();
+    public List<BorrowerResponseDto> getAllBorrowers() {
+        return borrowerService.getAllBorrowers().stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     @PostMapping
 
-    public ResponseEntity<Borrower> addBorrower(@Valid @RequestBody BorrowerRequestDto requestDto) {
+    public ResponseEntity<BorrowerResponseDto> addBorrower(@Valid @RequestBody BorrowerRequestDto requestDto) {
         Borrower savedBorrower = borrowerService.addBorrower(requestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedBorrower);
+        return ResponseEntity.status(HttpStatus.CREATED).body(convertToDto(savedBorrower));
+    }
+    private BorrowerResponseDto convertToDto(Borrower borrower) {
+        return new BorrowerResponseDto(
+                borrower.getId(),
+                borrower.getName(),
+                borrower.getEmail(),
+                borrower.getPhoneNumber()
+        );
     }
 }

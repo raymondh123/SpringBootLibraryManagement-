@@ -5,6 +5,7 @@ import com.example.librarymanagement.model.BorrowingTransaction;
 import com.example.librarymanagement.repository.BookRepository;
 import com.example.librarymanagement.repository.BorrowerRepository;
 import com.example.librarymanagement.repository.BorrowingTransactionRepository;
+import com.example.librarymanagement.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -24,18 +25,32 @@ public class TransactionService {
         this.bookRepository = bookRepository;
         this.borrowerRepository = borrowerRepository;
     }
-    public BorrowingTransaction borrowBook(Long bookId,Long borrowerId){
+    public BorrowingTransaction borrowBook(Long bookId, Long borrowerId) {
+
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Book Not Found"));
-        if (!book.isAvailable()){
-            throw new RuntimeException("Book is already borrowed");
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Book not found with id: " + bookId));
+
+        if (!book.isAvailable()) {
+            throw new IllegalArgumentException(
+                    "Book is already borrowed");
         }
+
         Borrower borrower = borrowerRepository.findById(borrowerId)
-                .orElseThrow(() -> new RuntimeException("Borrower not found"));
-        long activeCount= transactionRepository.countByBorrowerIdAndReturnDateIsNull(borrowerId);
-        if (activeCount >= maxBorrowLimit){
-            throw new RuntimeException("Borrower has reached the maximum borrowing limit of" + maxBorrowLimit);
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Borrower not found with id: " + borrowerId));
+
+        long activeCount =
+                transactionRepository.countByBorrowerIdAndReturnDateIsNull(borrowerId);
+
+        if (activeCount >= maxBorrowLimit) {
+            throw new IllegalArgumentException(
+                    "Borrower has reached the maximum borrowing limit of "
+                            + maxBorrowLimit);
         }
+
         book.setAvailable(false);
         bookRepository.save(book);
 
@@ -49,11 +64,17 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
     public BorrowingTransaction returnBook(Long transactionId) {
+
         BorrowingTransaction transaction = transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new RuntimeException("Transaction Not Found"));
-        if (transaction.isReturned()){
-            throw new RuntimeException("Book has already been returned");
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Transaction not found with id: " + transactionId));
+
+        if (transaction.isReturned()) {
+            throw new IllegalArgumentException(
+                    "Book has already been returned");
         }
+
         transaction.setReturned(true);
         transaction.setReturnDate(LocalDate.now());
 
@@ -63,6 +84,8 @@ public class TransactionService {
 
         return transactionRepository.save(transaction);
     }
+
+
     public List<BorrowingTransaction> getAllTransactions(){
         return transactionRepository.findAll();
     }
