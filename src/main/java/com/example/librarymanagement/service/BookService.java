@@ -6,6 +6,7 @@ import com.example.librarymanagement.model.BookCategory;
 import com.example.librarymanagement.repository.AuthorRepository;
 import com.example.librarymanagement.repository.BookRepository;
 import com.example.librarymanagement.dto.BookResponseDto;
+import com.example.librarymanagement.exception.ResourceNotFoundException;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -27,6 +28,14 @@ public class BookService {
         return bookRepository.findAll().stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
+    }
+    public BookResponseDto getBookById(Long id) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Book not found with id: " + id));
+
+        return convertToDto(book);
     }
 
     public BookResponseDto addBook(BookRequestDto dto){

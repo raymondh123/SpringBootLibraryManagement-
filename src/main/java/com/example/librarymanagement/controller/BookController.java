@@ -21,6 +21,10 @@ public class BookController {
     public List<BookResponseDto> getAllBooks() {
         return bookService.getAllBooks();
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<BookResponseDto> getBookById(@PathVariable Long id) {
+        return ResponseEntity.ok(bookService.getBookById(id));
+    }
 
     @PostMapping
     public ResponseEntity<BookResponseDto> addBook(@Valid @RequestBody BookRequestDto dto) {
