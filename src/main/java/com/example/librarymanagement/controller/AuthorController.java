@@ -47,4 +47,17 @@ public class AuthorController {
                 author.getName()
         );
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<AuthorResponseDto> updateAuthor(
+            @PathVariable Long id,
+            @Valid @RequestBody AuthorRequestDto requestDto) {
+
+        Author author = new Author();
+        author.setName(requestDto.getName());
+        author.setBiography(requestDto.getBiography());
+
+        Author updatedAuthor = authorService.updateAuthor(id, author);
+
+        return ResponseEntity.ok(convertToDto(updatedAuthor));
+    }
 }

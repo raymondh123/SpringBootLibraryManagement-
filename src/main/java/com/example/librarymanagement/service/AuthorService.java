@@ -24,4 +24,15 @@ public class AuthorService {
     public void deleteAuthor(Long id) {
         authorRepository.deleteById(id);
     }
+    public Author updateAuthor(Long id, Author updatedAuthor) {
+        Author author = authorRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Author not found with id " + id));
+
+        author.setName(updatedAuthor.getName());
+        author.setBiography(updatedAuthor.getBiography());
+
+        return authorRepository.save(author);
+    }
 }
