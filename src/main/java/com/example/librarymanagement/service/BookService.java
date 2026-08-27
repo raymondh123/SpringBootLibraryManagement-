@@ -71,6 +71,14 @@ public class BookService {
 
         return convertToDto(updatedBook);
     }
+    public void deleteBook(Long id) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Book not found with id: " + id));
+
+        bookRepository.delete(book);
+    }
     public List<BookResponseDto> searchBooks(String title, BookCategory category,String authorName){
         List<Book>books;
         if (title != null){ books =  bookRepository.findByTitleContainingIgnoreCase(title);
