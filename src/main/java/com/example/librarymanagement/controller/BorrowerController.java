@@ -35,6 +35,16 @@ public class BorrowerController {
 
         return ResponseEntity.ok(convertToDto(borrower));
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<BorrowerResponseDto> updateBorrower(
+            @PathVariable Long id,
+            @Valid @RequestBody BorrowerRequestDto requestDto) {
+
+        Borrower updatedBorrower =
+                borrowerService.updateBorrower(id, requestDto);
+
+        return ResponseEntity.ok(convertToDto(updatedBorrower));
+    }
 
     @PostMapping
 

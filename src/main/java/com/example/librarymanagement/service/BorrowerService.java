@@ -30,4 +30,16 @@ public class BorrowerService {
         borrower.setPhoneNumber(requestDto.getPhoneNumber());
         return borrowerRepository.save(borrower);
     }
+    public Borrower updateBorrower(Long id, BorrowerRequestDto requestDto) {
+        Borrower borrower = borrowerRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Borrower not found with id: " + id));
+
+        borrower.setName(requestDto.getName());
+        borrower.setEmail(requestDto.getEmail());
+        borrower.setPhoneNumber(requestDto.getPhoneNumber());
+
+        return borrowerRepository.save(borrower);
+    }
 }
