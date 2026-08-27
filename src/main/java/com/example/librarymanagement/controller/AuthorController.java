@@ -3,6 +3,7 @@ import com.example.librarymanagement.model.Author;
 import com.example.librarymanagement.service.AuthorService;
 import com.example.librarymanagement.dto.AuthorRequestDto;
 import com.example.librarymanagement.dto.AuthorResponseDto;
+import com.example.librarymanagement.dto.BookResponseDto;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,5 +60,11 @@ public class AuthorController {
         Author updatedAuthor = authorService.updateAuthor(id, author);
 
         return ResponseEntity.ok(convertToDto(updatedAuthor));
+    }
+    @GetMapping("/{id}/books")
+    public ResponseEntity<List<BookResponseDto>> getBooksByAuthor(
+            @PathVariable Long id) {
+
+        return ResponseEntity.ok(authorService.getBooksByAuthor(id));
     }
 }
