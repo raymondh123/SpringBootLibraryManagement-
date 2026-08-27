@@ -27,6 +27,14 @@ public class BorrowerController {
     public List<BorrowerResponseDto> getAllBorrowers() {
         return borrowerService.getAllBorrowers().stream().map(this::convertToDto).collect(Collectors.toList());
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<BorrowerResponseDto> getBorrowerById(
+            @PathVariable Long id) {
+
+        Borrower borrower = borrowerService.getBorrowerById(id);
+
+        return ResponseEntity.ok(convertToDto(borrower));
+    }
 
     @PostMapping
 

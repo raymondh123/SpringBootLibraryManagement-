@@ -2,6 +2,7 @@ package  com.example.librarymanagement.service;
 import com.example.librarymanagement.model.Borrower;
 import com.example.librarymanagement.repository.BorrowerRepository;
 import com.example.librarymanagement.dto.BorrowerRequestDto;
+import com.example.librarymanagement.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -14,6 +15,12 @@ public class BorrowerService {
     }
     public List<Borrower> getAllBorrowers() {
         return borrowerRepository.findAll();
+    }
+    public Borrower getBorrowerById(Long id) {
+        return borrowerRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Borrower not found with id: " + id));
     }
 
     public Borrower addBorrower(BorrowerRequestDto requestDto) {
